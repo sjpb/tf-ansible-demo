@@ -4,8 +4,11 @@
   tasks:
     - name: Template Terraform configuration
       template:
-        src: nodes.tf.j2
-        dest: tf/nodes.tf
+        src: "{{ item }}.tf.j2"
+        dest: "tf/{{ item }}.tf"
+      loop:
+        - nodes
+        - inventory
     - name: Terraform plan
       community.general.terraform:
         project_path: tf/

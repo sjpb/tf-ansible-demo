@@ -1,0 +1,12 @@
+resource "local_file" "hosts" {
+    content  = <<EOT
+all:
+    hosts:
+{% for inventory_hostname in groups['all'] %}
+        {{ inventory_hostname }}:
+            ansible_host: ${openstack_compute_instance_v2.{{ inventory_hostname }}.access_ip_v4}
+            networks: ${jsonencode({for n in openstack_compute_instance_v2.{{ inventory_hostname }}.network: n.name => n.fixed_ip_v4})}
+{% endfor %}
+EOT
+    filename = "${path.module}/../hosts.yaml"
+}

@@ -28,3 +28,9 @@ It also demonstrates:
 
     . venv/bin/activate
     ansible-playbook -i cluster.yml create.yml
+
+You can then run e.g.:
+
+    ansible all -i cluster.yml -i hosts.yaml  -a hostname
+
+using the generated `hosts.yml` file contains the `ansible_hostnames` to use for connection.
