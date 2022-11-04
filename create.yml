@@ -18,7 +18,7 @@
         msg: "{{ tf_plan.stdout }}"
     - name: Confirm Terraform plan execution
       pause:
-        prompt: "Do you want to execute this plan? (yes/no)"
+        prompt: "Do you want to execute this plan? (Only 'yes' executes)"
       register: confirm_plan
       when: "'No changes. Your infrastructure matches the configuration.' not in tf_plan.stdout"
     - name: Execute Terraform plan
