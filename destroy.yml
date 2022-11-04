@@ -1,0 +1,21 @@
+- hosts: localhost
+  become: no
+  gather_facts: no
+  tasks:
+    - name: List state
+      command: terraform -chdir=tf/ state list
+      register: tf_state
+    - name: Confirm Terraform plan execution
+      pause:
+        prompt: |
+          Current state:
+          {{ tf_state.stdout }}
+          
+          Do you want to destroy these resources? (Only 'yes' executes)"
+      register: confirm_plan
+    - name: Destroy Terraform resources
+      community.general.terraform:
+        project_path: tf/
+        state: absent
+      when:
+        - confirm_plan.user_input | bool
