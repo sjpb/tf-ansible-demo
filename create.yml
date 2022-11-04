@@ -1,0 +1,32 @@
+- hosts: localhost
+  become: no
+  gather_facts: no
+  tasks:
+    - name: Template Terraform configuration
+      template:
+        src: nodes.tf.j2
+        dest: tf/nodes.tf
+    - name: Terraform plan
+      community.general.terraform:
+        project_path: tf/
+        state: planned
+        plan_file: tf.plan
+        force_init: yes
+      register: tf_plan
+    - name: Show plan
+      debug:
+        msg: "{{ tf_plan.stdout }}"
+    - name: Confirm Terraform plan execution
+      pause:
+        prompt: "Do you want to execute this plan? (yes/no)"
+      register: confirm_plan
+      when: "'No changes. Your infrastructure matches the configuration.' not in tf_plan.stdout"
+    - name: Execute Terraform plan
+      community.general.terraform:
+        project_path: tf/
+        state: present
+        plan_file: tf.plan
+        force_init: yes
+      when:
+        - not confirm_plan.skipped | default(false)
+        - confirm_plan.user_input | bool

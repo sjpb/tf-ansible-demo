@@ -1,0 +1,15 @@
+all:
+  vars:
+    cluster_name: sb2
+    image_name: openhpc-220830-2042.qcow2
+    flavor: vm.alaska.cpu.general.small
+    key_pair: slurm-app-ci
+    networks:
+      - name: portal-internal
+        access_network: true
+      - name: WCDC-iLab-60
+    environment_root: "{{ playbook_dir }}"
+
+compute:
+  hosts:
+    compute[1:2]:

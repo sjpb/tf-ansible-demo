@@ -1,0 +1,22 @@
+{% for node in groups['compute'] %}
+resource "openstack_compute_instance_v2" "{{ node }}" {
+  
+  name = "{{ cluster_name }}-{{ node }}"
+  image_name = "{{ image_name }}"
+  flavor_name = "{{ flavor }}"
+  key_pair = "{{ key_pair }}"
+  
+  {% for network in networks %}
+  network {
+    {% for k, v in network.items() %}
+    {{ k }} = {{ v | to_json }}
+    {% endfor %}
+  }
+  {% endfor %}
+
+  metadata = {
+    environment_root = "{{ environment_root }}"
+  }
+
+}
+{% endfor %}
