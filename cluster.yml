@@ -11,16 +11,17 @@ all:
 
 control:
   hosts:
-    controlnode:
+    control:
+
 login:
   hosts:
-    loginnode:
+    login:
+
 compute:
   hosts:
-    computenode[1:2]:
+    compute[1:2]:
   vars:
     networks:
       - name: portal-internal
         access_network: true
       - name: WCDC-iLab-60
-
