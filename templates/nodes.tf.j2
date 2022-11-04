@@ -1,12 +1,12 @@
-{% for node in groups['compute'] %}
+{% for node in groups['all'] %}
 resource "openstack_compute_instance_v2" "{{ node }}" {
   
   name = "{{ cluster_name }}-{{ node }}"
-  image_name = "{{ image_name }}"
-  flavor_name = "{{ flavor }}"
+  image_name = "{{ hostvars[node].image_name }}"
+  flavor_name = "{{ hostvars[node].flavor }}"
   key_pair = "{{ key_pair }}"
   
-  {% for network in networks %}
+  {% for network in hostvars[node].networks %}
   network {
     {% for k, v in network.items() %}
     {{ k }} = {{ v | to_json }}

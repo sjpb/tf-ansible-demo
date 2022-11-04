@@ -7,9 +7,20 @@ all:
     networks:
       - name: portal-internal
         access_network: true
-      - name: WCDC-iLab-60
     environment_root: "{{ playbook_dir }}"
 
+control:
+  hosts:
+    controlnode:
+login:
+  hosts:
+    loginnode:
 compute:
   hosts:
-    compute[1:2]:
+    computenode[1:2]:
+  vars:
+    networks:
+      - name: portal-internal
+        access_network: true
+      - name: WCDC-iLab-60
+
